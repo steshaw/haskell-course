@@ -146,12 +146,9 @@ maximum (head :| tail) = foldRight max head tail
 -- Total: 10
 reverse :: List a -> List a
 reverse Nil = Nil
--- reverse (head :| tail) = reverse append (tail) (head :| Nil)
 reverse (head :| tail) = append (reverse tail)  (head :| Nil)
-
-
+--Tried to do this with a fold - but not sure what I am doing wrong here!
 --reverse (head :| tail) = foldLeft (flip (:|)) head tail
--- reverse = error "todo"
 
 
 -- END Exercises
