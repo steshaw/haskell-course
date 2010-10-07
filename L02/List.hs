@@ -25,6 +25,9 @@ infixr 5 :|
 instance (Show t) => Show (List t) where
   show = show . foldRight (:) []
 
+
+
+
 -- functions over List that you may consider using
 foldRight :: (a -> b -> b) -> b -> List a -> b
 foldRight _ b Nil      = b
@@ -53,8 +56,8 @@ reduceLeft f (h :| t) = foldLeft f h t
 -- Elegance: 0.5 marks
 -- Total: 3
 headOr :: List a -> a -> a
-headOr Nil a    = a ---
-headOr (h:|_) _ = h ---headOr = error "todo"
+headOr Nil def = def 
+headOr (head :| _) _ = head
 
 -- Exercise 2
 -- Relative Difficulty: 2
@@ -63,7 +66,8 @@ headOr (h:|_) _ = h ---headOr = error "todo"
 -- Elegance: 0.5 marks
 -- Total: 4
 sum :: List Int -> Int
-sum = foldLeft (+) 0 ---sum = error "todo"
+sum Nil = 0
+sum (head :| tail) = head + sum tail    
 
 -- Exercise 3
 -- Relative Difficulty: 2
@@ -72,7 +76,8 @@ sum = foldLeft (+) 0 ---sum = error "todo"
 -- Elegance: 0.5 marks
 -- Total: 4
 length :: List a -> Int
-length = foldLeft (const . succ) 0 ---length = error "todo"
+length Nil = 0
+length (_ :| tail) = length tail + 1
 
 -- Exercise 4
 -- Relative Difficulty: 5
@@ -81,7 +86,9 @@ length = foldLeft (const . succ) 0 ---length = error "todo"
 -- Elegance: 1.5 marks
 -- Total: 7
 map :: (a -> b) -> List a -> List b
-map f = foldRight (\a b -> f a :| b) Nil ---map = error "todo"
+map _ Nil = Nil
+map f (head :| tail)  = f head :| map f tail
+
 
 -- Exercise 5
 -- Relative Difficulty: 5
@@ -90,7 +97,9 @@ map f = foldRight (\a b -> f a :| b) Nil ---map = error "todo"
 -- Elegance: 1 mark
 -- Total: 7
 filter :: (a -> Bool) -> List a -> List a
-filter f = foldRight (\a -> if f a then (a:|) else id) Nil ---filter = error "todo"
+filter _ Nil = Nil
+filter f (head :| tail) | f head = head :| filter f tail
+                        | otherwise = filter f tail
 
 -- Exercise 6
 -- Relative Difficulty: 5
@@ -99,7 +108,8 @@ filter f = foldRight (\a -> if f a then (a:|) else id) Nil ---filter = error "to
 -- Elegance: 1 mark
 -- Total: 7
 append :: List a -> List a -> List a
-append = flip (foldRight (:|)) ---append = error "todo"
+append Nil a = a
+append (head :| tail) b = head :| (append tail b) 
 
 -- Exercise 7
 -- Relative Difficulty: 5
@@ -108,7 +118,7 @@ append = flip (foldRight (:|)) ---append = error "todo"
 -- Elegance: 1 mark
 -- Total: 7
 flatten :: List (List a) -> List a
-flatten = foldRight append Nil ---flatten = error "todo"
+flatten a = reduceLeft append a
 
 -- Exercise 8
 -- Relative Difficulty: 7
@@ -117,7 +127,7 @@ flatten = foldRight append Nil ---flatten = error "todo"
 -- Elegance: 1.5 mark
 -- Total: 8
 flatMap :: (a -> List b) -> List a -> List b
-flatMap f = flatten . map f ---flatMap = error "todo"
+flatMap f a =  flatten (map f a)
 
 -- Exercise 9
 -- Relative Difficulty: 8
@@ -126,7 +136,7 @@ flatMap f = flatten . map f ---flatMap = error "todo"
 -- Elegance: 2.5 marks
 -- Total: 9
 maximum :: List Int -> Int
-maximum = reduceLeft max ---maximum = error "todo"
+maximum (head :| tail) = foldRight max head tail
 
 -- Exercise 10
 -- Relative Difficulty: 10
@@ -135,7 +145,14 @@ maximum = reduceLeft max ---maximum = error "todo"
 -- Elegance: 2.5 marks
 -- Total: 10
 reverse :: List a -> List a
-reverse = foldLeft (flip (:|)) Nil ---reverse = error "todo"
+reverse Nil = Nil
+-- reverse (head :| tail) = reverse append (tail) (head :| Nil)
+reverse (head :| tail) = append (reverse tail)  (head :| Nil)
+
+
+--reverse (head :| tail) = foldLeft (flip (:|)) head tail
+-- reverse = error "todo"
+
 
 -- END Exercises
 
@@ -217,7 +234,7 @@ test =
 
         -- reverse
         ("reverse",
-         show (reverse (1 :| 2 :| 3 :| Nil))
+         show (reverse (1 :| 2 :| 3 :| Nil  ))
        , show (3 :| 2 :| 1 :| Nil))
         ]
       check (n, a, b) = do print ("=== " ++ n ++ " ===")
