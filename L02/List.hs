@@ -66,8 +66,7 @@ headOr (head :| _) _ = head
 -- Elegance: 0.5 marks
 -- Total: 4
 sum :: List Int -> Int
-sum Nil = 0
-sum (head :| tail) = head + sum tail    
+sum = foldLeft (+) 0
 
 -- Exercise 3
 -- Relative Difficulty: 2
@@ -75,9 +74,9 @@ sum (head :| tail) = head + sum tail
 -- Performance: 1 mark
 -- Elegance: 0.5 marks
 -- Total: 4
+-- foldLeft
 length :: List a -> Int
-length Nil = 0
-length (_ :| tail) = length tail + 1
+length = foldLeft (\x _ -> (x+1)) 0
 
 -- Exercise 4
 -- Relative Difficulty: 5
@@ -86,9 +85,7 @@ length (_ :| tail) = length tail + 1
 -- Elegance: 1.5 marks
 -- Total: 7
 map :: (a -> b) -> List a -> List b
-map _ Nil = Nil
-map f (head :| tail)  = f head :| map f tail
-
+map func = foldRight (\x y -> ((func x) :| y)) Nil
 
 -- Exercise 5
 -- Relative Difficulty: 5
@@ -97,9 +94,7 @@ map f (head :| tail)  = f head :| map f tail
 -- Elegance: 1 mark
 -- Total: 7
 filter :: (a -> Bool) -> List a -> List a
-filter _ Nil = Nil
-filter f (head :| tail) | f head = head :| filter f tail
-                        | otherwise = filter f tail
+filter func = foldRight (\x y -> if func x then (x :| y) else y) Nil
 
 -- Exercise 6
 -- Relative Difficulty: 5
@@ -107,9 +102,9 @@ filter f (head :| tail) | f head = head :| filter f tail
 -- Performance: 1.5 marks
 -- Elegance: 1 mark
 -- Total: 7
+-- foldRight
 append :: List a -> List a -> List a
-append Nil a = a
-append (head :| tail) b = head :| (append tail b) 
+append a b = foldRight (\x y -> (x :| y)) b a	
 
 -- Exercise 7
 -- Relative Difficulty: 5
@@ -117,8 +112,11 @@ append (head :| tail) b = head :| (append tail b)
 -- Performance: 1.5 marks
 -- Elegance: 1 mark
 -- Total: 7
+-- foldRight|flatMap
 flatten :: List (List a) -> List a
+-- flatten Nil = Nil
 flatten a = reduceLeft append a
+
 
 -- Exercise 8
 -- Relative Difficulty: 7
@@ -126,6 +124,7 @@ flatten a = reduceLeft append a
 -- Performance: 1.5 marks
 -- Elegance: 1.5 mark
 -- Total: 8
+-- Right | map+flatten
 flatMap :: (a -> List b) -> List a -> List b
 flatMap f a =  flatten (map f a)
 
@@ -135,6 +134,7 @@ flatMap f a =  flatten (map f a)
 -- Performance: 3.0 marks
 -- Elegance: 2.5 marks
 -- Total: 9
+-- Reduceleft
 maximum :: List Int -> Int
 maximum (head :| tail) = foldRight max head tail
 
@@ -144,11 +144,12 @@ maximum (head :| tail) = foldRight max head tail
 -- Performance: 2.5 marks
 -- Elegance: 2.5 marks
 -- Total: 10
+-- FlatLeft
 reverse :: List a -> List a
 reverse Nil = Nil
-reverse (head :| tail) = append (reverse tail)  (head :| Nil)
+-- reverse (head :| tail) = append (reverse tail)  (head :| Nil)
 --Tried to do this with a fold - but not sure what I am doing wrong here!
---reverse (head :| tail) = foldLeft (flip (:|)) head tail
+reverse (head :| tail) = foldLeft (flip (:|)) head tail
 
 
 -- END Exercises
@@ -215,8 +216,12 @@ test =
        , show (1 :| 2 :| 3 :| Nil)),
 
         -- flatten
+--        ("flatten",
+--         show (flatten (Nil) :| (Nil) :| Nil )
+--       , showNil),
+
         ("flatten",
-         show (flatten ((1 :| 2 :| Nil) :| ((3 :| 4 :| Nil) :| Nil)))
+	 show (flatten ((1 :| 2 :| Nil) :| ((3 :| 4 :| Nil) :| Nil)))
        , show (1 :| 2 :| 3 :| 4 :| Nil)),
 
         -- flatMap
