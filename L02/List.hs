@@ -114,9 +114,7 @@ append a b = foldRight (\x y -> (x :| y)) b a
 -- Total: 7
 -- foldRight|flatMap
 flatten :: List (List a) -> List a
--- flatten Nil = Nil
-flatten a = reduceLeft append a
-
+flatten = foldRight append Nil
 
 -- Exercise 8
 -- Relative Difficulty: 7
@@ -146,11 +144,7 @@ maximum (head :| tail) = foldRight max head tail
 -- Total: 10
 -- FlatLeft
 reverse :: List a -> List a
-reverse Nil = Nil
--- reverse (head :| tail) = append (reverse tail)  (head :| Nil)
---Tried to do this with a fold - but not sure what I am doing wrong here!
-reverse (head :| tail) = foldLeft (flip (:|)) head tail
-
+reverse = foldLeft (flip (:|)) Nil
 
 -- END Exercises
 
@@ -216,10 +210,6 @@ test =
        , show (1 :| 2 :| 3 :| Nil)),
 
         -- flatten
---        ("flatten",
---         show (flatten (Nil) :| (Nil) :| Nil )
---       , showNil),
-
         ("flatten",
 	 show (flatten ((1 :| 2 :| Nil) :| ((3 :| 4 :| Nil) :| Nil)))
        , show (1 :| 2 :| 3 :| 4 :| Nil)),
