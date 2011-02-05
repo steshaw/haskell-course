@@ -12,26 +12,27 @@ class Fluffy f where
 -- Exercise 1
 -- Relative Difficulty: 1
 instance Fluffy List where
-  -- furry :: (a -> b) -> List a -> List b
-  furry = map
+--  furry f Nil = Nil
+--  furry f (x :| xs) = (f x) :| (furry f xs)
+   furry = L02.List.map
 
 -- Exercise 2
 -- Relative Difficulty: 1
 instance Fluffy Optional where
-  --furry :: (a -> b) -> Optional a -> Optional b
-  furry _ Empty = Empty
-  furry f (Full a) = Full (f a)
+--   furry f Empty = Empty
+--   furry f (Full a) = Full (f a)
+    furry = L01.Optional.mapOptional
 
 -- Exercise 3
 -- Relative Difficulty: 2
 instance Fluffy Parser where
-  -- furry :: (a -> b) -> Parser a -> Parser b
-  furry f p = bindParser p (\a -> valueParser (f a))
+--bindParser :: Parser a -> (a -> Parser b) -> Parser b
+--furry :: (a -> b) -> Parser a -> Parser b
+  furry f = (flip bindParser (valueParser . f))
 
-
---
+-----------------------
 -- SUPPORT LIBRARIES --
---
+-----------------------
 
 instance Fluffy [] where
   furry = fmap
