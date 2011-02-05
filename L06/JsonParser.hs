@@ -1,133 +1,98 @@
 module L06.JsonParser where
 
-import Prelude hiding (exponent)
-import Data.Char
-import Data.Map
+import Numeric
+import Control.Applicative
 import L01.Validation
 import L03.Parser
 import L06.JsonValue
 import L06.MoreParser
 
-jsonNull
-  :: Parser JsonValue
-jsonNull =
-  do stringThenSpaces "null"
-     return JsonNull
-
-jsonTrue
-  :: Parser JsonValue
-jsonTrue =
-  do stringThenSpaces "true"
-     return JsonNull
-
-jsonFalse
-  :: Parser JsonValue
-jsonFalse =
-  do stringThenSpaces "false"
-     return JsonNull
-
-fractional
-  :: Parser String
-fractional =
-  do is '.'
-     d <- digits
-     return ('.':d)
-
-exponent ::
-  Parser String
-exponent =
-  do e <- oneof "eE"
-     s <- option '+' (oneof "+-")
-     d <- digits
-     return (e:s:d)
-
-int ::
-  Parser String
-int =
-  do s <- option [] (string "-")
-     v <- string "0" ||| digits
-     return (s ++ v)
-
-jsonNumber ::
-  Parser JsonValue
-jsonNumber =
-  do i <- int
-     f <- option [] fractional
-     e <- option [] exponent
-     return . JsonNumber . read . concat $ [i,f,e]
-
-isJsonChar :: Char -> Bool
-isJsonChar =
-  and . sequence [isAscii, isPrint, (/= '\\'), (/= '"')]
-
-jsonChar ::
-  Parser Char
-jsonChar =
-  satisfy isJsonChar
-  ||| do is '\\'  -- escaping backslash
-         is '\\'  -- escaped character
-           ||| is '"'
-           ||| is '/'
-           ||| (is 'b' >> return '\b')
-           ||| (is 'f' >> return '\f')
-           ||| (is 'n' >> return '\n')
-           ||| (is 'r' >> return '\r')
-           ||| (is 't' >> return '\t')
-           ||| hex
-
+-- Exercise 1
+-- Parse a JSON string. Handle double-quotes, control characters, hexadecimal characters.
+-- ~~~ Use oneof, hex, is, satisfyAll, betweenCharTok, list ~~~
 jsonString ::
-  Parser JsonValue
+  Parser String
 jsonString =
-  do s <- between quote quote (list jsonChar)
-     return (JsonString s)
+  let e = oneof "\"\\/bfnrt" ||| hex           ---
+      c = (is '\\' >> e)                       ---
+          ||| satisfyAll [(/= '"'), (/= '\\')] ---
+  in betweenCharTok '"' '"' (list c)           ---  error "todo"
 
-jsonPair ::
-  Parser (String, JsonValue)
-jsonPair =
-  let z (JsonString s) = s
-      z _              = []
-  in do k   <- thenSpaces jsonString
-        thenSpaces (is ':')
-        v <- thenSpaces jsonValue
-        return (z k, v)
+-- Exercise 2
+-- Parse a JSON rational.
+-- ~~~ Use readSigned and readFloat ~~~
+jsonNumber ::
+  Parser Rational
+jsonNumber =
+  P (\i -> case readSigned readFloat i of                         ---
+             [] -> Error ("Expected Rational but got " ++ show i) ---
+             ((n, z):_) -> Value (z, n))                          ---  error "todo"
 
-jsonObject ::
-  Parser JsonValue
-jsonObject =
-  do p <- between (charThenSpaces '{') (charThenSpaces '}') (sepby jsonPair commaThenSpaces)
-     return . JsonObject $ fromList p
+-- Exercise 3
+-- Parse a JSON true literal.
+-- ~~~ Use stringTok ~~~
+jsonTrue ::
+  Parser String
+jsonTrue =
+  stringTok "true" ---  error "todo"
 
+-- Exercise 4
+-- Parse a JSON false literal.
+-- ~~~ Use stringTok ~~~
+jsonFalse ::
+  Parser String
+jsonFalse =
+  stringTok "false" ---  error "todo"
+
+-- Exercise 5
+-- Parse a JSON null literal.
+-- ~~~ Use stringTok ~~~
+jsonNull ::
+  Parser String
+jsonNull =
+  stringTok "null" ---  error "todo"
+
+-- Exercise 6
+-- Parse a JSON array.
+-- ~~~ Use betweenSepbyComma and jsonValue ~~~
 jsonArray ::
-  Parser JsonValue
+  Parser [JsonValue]
 jsonArray =
-  do v <- between (charThenSpaces '[') (charThenSpaces ']') (sepby (thenSpaces jsonValue) commaThenSpaces)
-     return . JsonArray $ v
+  betweenSepbyComma '[' ']' jsonValue ---  error "todo"
 
+-- Exercise 7
+-- Parse a JSON object.
+-- ~~~ Use jsonString, charTok, betweenSepbyComma and jsonValue ~~~
+jsonObject ::
+  Parser Assoc
+jsonObject =
+  let field = (,) <$> (jsonString <* charTok ':') <*> jsonValue ---
+  in betweenSepbyComma '{' '}' field                            ---  error "todo"
+
+-- Exercise 8
+-- Parse a JSON value.
+-- ~~~ Use spaces, jsonNull, jsonTrue, jsonFalse, jsonArray, jsonString, jsonObject and jsonNumber ~~~
 jsonValue ::
   Parser JsonValue
 jsonValue =
-  do spaces
-     obj <- thenSpaces
-              (jsonString
-           ||| jsonNumber
-           ||| jsonObject
-           ||| jsonArray
-           ||| jsonTrue
-           ||| jsonFalse
-           ||| jsonNull)
-     return obj
+      spaces *>                           ---
+      (JsonNull <$ jsonNull               ---
+   ||| JsonTrue <$ jsonTrue               ---
+   ||| JsonFalse <$ jsonFalse             ---
+   ||| JsonArray <$> jsonArray            ---
+   ||| JsonString <$> jsonString          ---
+   ||| JsonObject <$> jsonObject          ---
+   ||| JsonRational False <$> jsonNumber) ---  error "todo"
 
-jsonFile ::
-  Parser JsonValue
-jsonFile =
-  do c <- jsonObject ||| jsonArray
-     eof
-     return c
-
-readJsonFile ::
-  FilePath -> IO JsonValue
-readJsonFile p =
-  do c <- readFile p
-     case parse jsonFile c of Error m -> error m
-                              Value (_, a) -> return a
+-- Exercise 9
+-- Read a file into a JSON value.
+-- ~~~ Use readFile and jsonValue ~~~
+readJsonValue ::
+  FilePath
+  -> IO JsonValue
+readJsonValue p =
+  do c <- readFile p         ---
+     case jsonValue <.> c of ---
+       Error m -> error m    ---
+       Value a -> return a   ---  error "todo"
 
