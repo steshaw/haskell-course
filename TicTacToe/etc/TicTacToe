@@ -1,0 +1,48 @@
+TicTacToe
+=========
+
+* Build with CABAL
+  * TicTacToe.cabal
+  * Setup.hs
+
+* Should be thoroughly tested
+  * Consider using:
+    * QuickCheck
+    * HUnit
+    * test-framework
+
+* Include a .ghci for convenience when developing
+  * http://haskell.org/ghc/docs/6.12.2/html/users_guide/ghci-dot-files.html
+
+* API documented using Haddock
+  * http://www.haskell.org/haddock/doc/html/index.html
+
+* Code style examined using hlint
+  * cabal install hlint
+  * Produce a report (--report)
+  * http://community.haskell.org/~ndm/darcs/hlint/hlint.htm
+
+* Use hoogle and hayoo to find library functions
+  * http://haskell.org/hoogle/
+  * http://holumbus.fh-wedel.de/hayoo/hayoo.html
+
+* Expose an appropriate pure, functional API that /utilises the types to enforce invariants/
+  * The move function returns one of:
+    * A new board denoting that the game is still in play.
+    * A finished board denoting that the game is complete.
+    * An error indicating that the position to move to is already occupied.
+  * Some API rules:
+    * It is not possible (type error) to call move on a game board that is complete.
+    * It is not possible (type error) to call whoWins on a game board that is in play.
+    * Implement functions that are common across both in-play and completed game boards
+      * e.g. isPositionOccupied :: b -> Position -> Bool
+  * Ponder the question:
+    * Is it possible to use the types
+* Interactive play using API
+  * Two player game at the console
+
+
+* Extra-curricular
+  * Write an opponent that never loses
+* Extra-Extra-curricular
+  * Write an opponent with easy, medium, hard difficulty levels
