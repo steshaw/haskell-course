@@ -55,8 +55,7 @@ reduceLeft f (h :| t) = foldLeft f h t
 -- Elegance: 0.5 marks
 -- Total: 3
 headOr :: List a -> a -> a
-headOr Nil y = y
-headOr (h :| _) _ = h
+headOr = error "todo"
 
 -- Exercise 2
 -- Relative Difficulty: 2

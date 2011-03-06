@@ -14,25 +14,25 @@ class Misty m where
   -- Relative Difficulty: 3
   -- (use banana and unicorn)
   furry' :: (a -> b) -> m a -> m b
-  furry' f = error "todo"
+  furry' f = banana (unicorn . f)
 
 -- Exercise 5
 -- Relative Difficulty: 2
 instance Misty List where
-  banana f = error "todo"
-  unicorn = error "todo"
+  banana = flatMap
+  unicorn a = a :| Nil
 
 -- Exercise 6
 -- Relative Difficulty: 2
 instance Misty Optional where
-  banana = error "todo"
-  unicorn = error "todo"
+  banana = flip bindOptional
+  unicorn = Full
 
 -- Exercise 7
 -- Relative Difficulty: 3
 instance Misty Parser where
-  banana = error "todo"
-  unicorn = error "todo"
+  banana = flip bindParser
+  unicorn = valueParser
 
 -- Exercise 8
 -- Relative Difficulty: 2

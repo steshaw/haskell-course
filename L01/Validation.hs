@@ -2,10 +2,6 @@ module L01.Validation where
 
 type Err = String
 
---  class Validation<A> {
---    Validation(String error) {} // Error
---    Validation(A value) {} // Value
---  }
 data Validation a = Error Err | Value a
   deriving (Eq, Show)
 
