@@ -1,10 +1,11 @@
 module L04.Misty where
 
 import L01.Optional
-import L01.Validation
 import L02.List
 import L03.Parser
-
+{-
+import L01.Validation
+-}
 
 class Misty m where
   banana :: (a -> m b) -> m a -> m b
@@ -13,15 +14,13 @@ class Misty m where
   -- Relative Difficulty: 3
   -- (use banana and unicorn)
   furry' :: (a -> b) -> m a -> m b
-  furry' f = banana (unicorn . f)
+  furry' f = error "todo"
 
 -- Exercise 5
 -- Relative Difficulty: 2
 instance Misty List where
---  banana _ Nil = Nil
---  banana f (x:|xs)  = append (f x) (banana f xs)
-  banana f = foldRight (append . f) Nil
-  unicorn = flip (:|) Nil
+  banana f = error "todo"
+  unicorn = error "todo"
 
 -- Exercise 6
 -- Relative Difficulty: 2

@@ -4,7 +4,8 @@ module L01.Optional where
 --    Optional(A a) {} // Full
 --    Optional() {} // Empty
 --  }
-data Optional a = Full a | Empty deriving (Eq, Show)
+data Optional a = Full a | Empty 
+  deriving (Eq, Show)
 
 mapOptional :: (a -> b) -> Optional a -> Optional b
 mapOptional _ Empty    = Empty
