@@ -4,9 +4,7 @@ import Prelude hiding (sum, length, map, filter, maximum, reverse)
 import L01.Optional
 import L03.Parser
 import L02.List
-{-
-import L01.Validation
--}
+-- import L01.Validation
 
 class Fluffy f where
   furry :: (a -> b) -> f a -> f b
@@ -14,13 +12,13 @@ class Fluffy f where
 -- Exercise 1
 -- Relative Difficulty: 1
 instance Fluffy List where
-   furry = map
+  furry = map
 
 -- Exercise 2
 -- Relative Difficulty: 1
 instance Fluffy Optional where
-    --furry = mapOptional
-    furry = L01.Optional.mapOptional
+  furry = mapOptional
+  --furry = L01.Optional.mapOptional
 
 
 -- Exercise 3

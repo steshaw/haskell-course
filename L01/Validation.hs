@@ -30,4 +30,3 @@ errorOr (Value _) a = a
 
 valueValidation :: a -> Validation a
 valueValidation = Value
-

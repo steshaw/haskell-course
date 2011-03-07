@@ -8,7 +8,6 @@ import Test.Framework
 import Test.Framework.Providers.QuickCheck2 (testProperty)
 import L02.List
 
-
 -- How to produce arbitrary instances of List
 instance Arbitrary a => Arbitrary (List a) where
   arbitrary = fmap (foldr (:|) Nil) arbitrary

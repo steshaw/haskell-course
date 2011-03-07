@@ -84,5 +84,3 @@ fluffyTests =
                            print (if a == b then "PASS" else "FAIL Expected: " ++ b ++ " Actual: " ++ a)
 
   in mapM_ check results
-
-

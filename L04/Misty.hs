@@ -3,33 +3,22 @@ module L04.Misty where
 import L01.Optional
 import L02.List
 import L03.Parser
-{-
-import L01.Validation
--}
+-- import L01.Validation
 
 class Misty m where
   banana :: (a -> m b) -> m a -> m b
   unicorn :: a -> m a
-  -- Exercise 4
-  -- Relative Difficulty: 3
-  -- (use banana and unicorn)
   furry' :: (a -> b) -> m a -> m b
   furry' f = banana (unicorn . f)
 
--- Exercise 5
--- Relative Difficulty: 2
 instance Misty List where
   banana = flatMap
   unicorn a = a :| Nil
 
--- Exercise 6
--- Relative Difficulty: 2
 instance Misty Optional where
   banana = flip bindOptional
   unicorn = Full
 
--- Exercise 7
--- Relative Difficulty: 3
 instance Misty Parser where
   banana = flip bindParser
   unicorn = valueParser
@@ -37,7 +26,7 @@ instance Misty Parser where
 -- Exercise 8
 -- Relative Difficulty: 2
 jellybean :: Misty m => m (m a) -> m a
-jellybean = banana id ---jellybean = error "todo"
+jellybean = error "todo"
 
 -- Exercise 9
 -- Relative Difficulty: 3
