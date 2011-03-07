@@ -14,7 +14,6 @@ class Fluffy f where
 -- Exercise 1
 -- Relative Difficulty: 1
 instance Fluffy List where
-   --furry = L02.List.map
    furry = map
 
 -- Exercise 2
@@ -22,6 +21,7 @@ instance Fluffy List where
 instance Fluffy Optional where
     --furry = mapOptional
     furry = L01.Optional.mapOptional
+
 
 -- Exercise 3
 -- Relative Difficulty: 2

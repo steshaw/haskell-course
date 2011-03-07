@@ -37,7 +37,7 @@ instance Misty Parser where
 -- Exercise 8
 -- Relative Difficulty: 2
 jellybean :: Misty m => m (m a) -> m a
-jellybean = error "todo"
+jellybean = banana id ---jellybean = error "todo"
 
 -- Exercise 9
 -- Relative Difficulty: 3
