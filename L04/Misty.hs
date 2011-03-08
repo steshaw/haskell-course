@@ -23,10 +23,8 @@ instance Misty Parser where
   banana = flip bindParser
   unicorn = valueParser
 
--- Exercise 8
--- Relative Difficulty: 2
 jellybean :: Misty m => m (m a) -> m a
-jellybean = error "todo"
+jellybean = banana id
 
 -- Exercise 9
 -- Relative Difficulty: 3
