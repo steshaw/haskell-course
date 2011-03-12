@@ -16,7 +16,7 @@ jsonString =
   let e = oneof "\"\\/bfnrt" ||| hex           ---
       c = (is '\\' >> e)                       ---
           ||| satisfyAll [(/= '"'), (/= '\\')] ---
-  in betweenCharTok '"' '"' (list c)           ---  error "todo"
+  in betweenCharTok '"' '"' (many0 c)           ---  error "todo"
 
 -- Exercise 2
 -- Parse a JSON rational.

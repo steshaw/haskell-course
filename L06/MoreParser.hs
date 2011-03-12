@@ -64,7 +64,7 @@ We will gently start using these libraries. Identify the pattern of computation 
 spaces ::
   Parser String
 spaces =
-  list space ---  error "todo"
+  many0 space ---  error "todo"
 
 -- Exercise 6
 -- Write a function that applies the given parser, then parses 0 or more spaces,
@@ -206,7 +206,7 @@ sepby1 ::
   -> Parser [a]
 sepby1 p s =
   do v <- p             ---
-     w <- list (s >> p) ---
+     w <- many0 (s >> p) ---
      return (v:w)       ---  error "todo"
 
 -- Exercise 20

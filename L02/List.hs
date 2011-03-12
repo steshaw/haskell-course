@@ -14,10 +14,13 @@ module L02.List where
 
 import Prelude hiding (sum, length, map, filter, maximum, reverse)
 
+import Steshaw ((|>))
+
 -- BEGIN Helper functions and data types
 
 -- The custom list type
-data List t = Nil | t :| List t deriving Eq
+data List t = Nil | t :| List t
+  deriving Eq
 
 -- Right-associative
 infixr 5 :|
@@ -53,7 +56,8 @@ reduceLeft f (h :| t) = foldLeft f h t
 -- Elegance: 0.5 marks
 -- Total: 3
 headOr :: List a -> a -> a
-headOr = error "todo"
+headOr Nil a = a
+headOr (a :| _) _ = a
 
 -- Exercise 2
 -- Relative Difficulty: 2
@@ -62,7 +66,7 @@ headOr = error "todo"
 -- Elegance: 0.5 marks
 -- Total: 4
 sum :: List Int -> Int
-sum = error "todo"
+sum = foldLeft (+) 0
 
 -- Exercise 3
 -- Relative Difficulty: 2
@@ -71,7 +75,8 @@ sum = error "todo"
 -- Elegance: 0.5 marks
 -- Total: 4
 length :: List a -> Int
-length = error "todo"
+length = foldLeft plusOne 0
+  where plusOne acc _ = acc + 1
 
 -- Exercise 4
 -- Relative Difficulty: 5
@@ -80,7 +85,8 @@ length = error "todo"
 -- Elegance: 1.5 marks
 -- Total: 7
 map :: (a -> b) -> List a -> List b
-map f = error "todo"
+map f = foldRight (\n xs -> f n :| xs) Nil
+-- XXX: point-free here?
 
 -- Exercise 5
 -- Relative Difficulty: 5
@@ -89,7 +95,8 @@ map f = error "todo"
 -- Elegance: 1 mark
 -- Total: 7
 filter :: (a -> Bool) -> List a -> List a
-filter f = error "todo"
+filter f = foldRight accWhen Nil
+  where accWhen x xs = if f x then x :| xs else xs
 
 -- Exercise 6
 -- Relative Difficulty: 5
@@ -98,7 +105,8 @@ filter f = error "todo"
 -- Elegance: 1 mark
 -- Total: 7
 append :: List a -> List a -> List a
-append = error "todo"
+--append as aas = foldRight (:|) aas as
+append = foldRight (:|) |> flip
 
 -- Exercise 7
 -- Relative Difficulty: 5
@@ -107,7 +115,8 @@ append = error "todo"
 -- Elegance: 1 mark
 -- Total: 7
 flatten :: List (List a) -> List a
-flatten = error "todo"
+flatten = foldLeft append Nil
+-- FIXME: performance.
 
 -- Exercise 8
 -- Relative Difficulty: 7
@@ -116,7 +125,8 @@ flatten = error "todo"
 -- Elegance: 1.5 mark
 -- Total: 8
 flatMap :: (a -> List b) -> List a -> List b
-flatMap = error "todo"
+flatMap f xs = map f xs |> flatten
+-- FIXME: performance.
 
 -- Exercise 9
 -- Relative Difficulty: 8
@@ -125,7 +135,7 @@ flatMap = error "todo"
 -- Elegance: 2.5 marks
 -- Total: 9
 maximum :: List Int -> Int
-maximum = error "todo"
+maximum = reduceLeft max
 
 -- Exercise 10
 -- Relative Difficulty: 10
@@ -134,14 +144,14 @@ maximum = error "todo"
 -- Elegance: 2.5 marks
 -- Total: 10
 reverse :: List a -> List a
-reverse = error "todo"
+reverse = foldLeft (flip (:|)) Nil
 
 -- END Exercises
 
 -- BEGIN Tests for Exercises
 
-test :: IO ()
-test =
+testL02List :: IO ()
+testL02List =
   let showNil = show (Nil :: List Int)
       results =
         [

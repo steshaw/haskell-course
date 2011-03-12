@@ -5,8 +5,8 @@ import L02.List
 import L04.Fluffy
 import L04.Misty
 
-fluffyTests :: IO ()
-fluffyTests =
+testL04Fluffy :: IO ()
+testL04Fluffy =
   let showNil = show (Nil :: List Int)
       empty = Empty :: Optional Int      
       results =

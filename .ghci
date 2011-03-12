@@ -1,10 +1,9 @@
-:m + Test.QuickCheck
-:l Course.hs
-:m + Course
-:set prompt ">> "
+-- :set prompt ">> "
 :set -Wall
 :set -fno-warn-orphans
 :set -fno-warn-type-defaults
 :set -fno-warn-name-shadowing
 :set -fno-warn-unused-do-bind
-
+:m + Test.QuickCheck
+:load Course.hs
+-- :module +Course
