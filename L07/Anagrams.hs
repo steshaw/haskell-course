@@ -1,8 +1,10 @@
 module L07.Anagrams where
 
+{-
 import Data.Char
 import Data.List
 import Data.Function
+-}
 
 
 {-
@@ -22,21 +24,17 @@ Functions that might help
 
 -}
 
-
 -- Return all anagrams of the given string
 -- that appear in the given dictionary file.
 anagrams ::
   String
   -> FilePath
   -> IO [String]
-anagrams name =
-  fmap (intersectBy equalIgnoringCase (permutations name) . lines) . readFile ---  error "todo"
+anagrams = error "todo"
 
 -- Compare two strings for equality, ignoring case
 equalIgnoringCase ::
   String
   -> String
   -> Bool
-equalIgnoringCase =
-  (==) `on` map toLower ---  error "todo"
-
+equalIgnoringCase = error "todo"
