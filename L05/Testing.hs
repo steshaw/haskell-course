@@ -92,15 +92,13 @@ prop_flatten xs = sum (map length xs) == length (flatten xs)
 -- Using (>>>=>) expressed in terms of flatMap, show that
 -- (>>>=>) is an associative binary operation.
 -- FIXME: This property is very very slow to check.
--- XXX: Pretty sure I'm not testing associativity either.
--- XXX: Unsure what the definition/type of (>>>=>) should be. Was that seen earlier? later?
-prop_flatMap_associative :: (Int -> List String) -> (String -> List Char) -> (Char -> List Integer) -> Int -> Bool
-prop_flatMap_associative f1 f2 f3 n =
-    ((f1 n >>>=> f2) >>>=> f3) == (f1 n >>>=> \strings -> (f2 strings >>>=> f3))
+prop_flatMap_associative :: (Int -> List String) -> (String -> List Char) -> (Char -> List Integer) -> Int -> Property
+prop_flatMap_associative f g h n =
+    n >= -100 && n <= 100 ==>
+      ((f >>>=> g) >>>=> h) n == (f >>>=> (g >>>=> h)) n
   where
-    (>>>=>) :: List a -> (a -> List b) -> List b
-    (>>>=>) = flip flatMap
---(>>>=>) a b = flatMap (const b) a
+    f >>>=> g = \a -> (f a `bind` g)
+    bind = flip flatMap
 
 -- Exercise 9
 -- All elements in maximum of a list (x) are less then or equal to x.
@@ -113,7 +111,7 @@ prop_maximum xs = all (<= max) xs
 -- Ensure safety with regard to the empty list.
 --prop_maximum_contains :: List Int -> Property
 prop_maximum_contains :: List Int -> Property
-prop_maximum_contains xs = property $ (length xs == 0) || (contains xs (maximum xs))
+prop_maximum_contains xs = (not . isEmpty) xs ==> contains xs (maximum xs)
 
 -- Exercise 11
 -- Reversing a list (x) then reversing again results in x.
