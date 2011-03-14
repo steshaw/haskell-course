@@ -13,7 +13,7 @@ import Control.Monad
 -- Parses the given input and returns the result.
 -- The remaining input is ignored.
 (<.>) :: Parser a -> Input -> Validation a
-(<.>) i = mapValidation snd . parse i
+(<.>) p = mapValidation snd . parse p
 
 -- Exercise 1
 -- Write a Functor instance for a Parser.
@@ -210,4 +210,4 @@ satisfyAny preds =
 betweenSepbyComma :: Char -> Char -> Parser a -> Parser [a]
 --betweenCharTok :: Char -> Char -> Parser a -> Parser a
 betweenSepbyComma begChar endChar a = 
-  betweenCharTok begChar endChar (sepby a commaTok)
+  betweenCharTok begChar endChar (sepby (tok a) commaTok)

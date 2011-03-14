@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Fred Flintstone",
+    "age": 32,
+    "notes": [1,2,3]
+  },
+  {
+    "name" : "Wilma Flintstone",
+    "age" : 30,
+    "notes" : "Something about Wilma"
+  }
+]

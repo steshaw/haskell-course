@@ -137,7 +137,7 @@ natural = many1 digit `bindParser` \digits -> valueParser (read digits)
 --   * The produced character is not a space.
 -- ~~~ Use the satisfy and Data.Char.isSpace functions. ~~~
 space :: Parser Char
-space = is ' '
+space = satisfy isSpace
 
 -- Exercise 10.5
 -- Return a parser that produces one or more space characters
