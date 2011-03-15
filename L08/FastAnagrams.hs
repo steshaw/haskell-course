@@ -14,6 +14,7 @@ fastAnagrams word f = do
     contents <- readFile f
     return $ frobnicate contents
   where
+    frobnicate :: String -> [String]
     frobnicate dictionary = findEm (makeSet dictionary) |> map ncString
     findEm wordSet = filter ((flip S.member) wordSet) uniquePermutations
     makeSet dictionary = lines dictionary |> map NoCaseString |> S.fromList
@@ -28,7 +29,7 @@ instance Eq NoCaseString where
   (==) = (==) `on` (ncString >>> map toLower)
 
 instance Show NoCaseString where
-  show = show . ncString
+  show = ncString >>> show
 
 instance Ord NoCaseString where
   compare = compare `on` (ncString >>> map toLower)
