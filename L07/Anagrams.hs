@@ -20,11 +20,11 @@ Functions that might help
 -}
 
 grabEm :: String -> [String] -> [String]
-grabEm word words = map fst $ Prelude.filter f dict
+grabEm word words = map fst $ Prelude.filter f sdict
   where
     f item = sortedWord == (snd item) && word /= (fst item)
     sortedWord = sort word
-    dict = zip words (map sort words)
+    sdict = zip words (map sort words)
 
 -- Return all anagrams of the given string
 -- that appear in the given dictionary file.

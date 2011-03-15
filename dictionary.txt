@@ -1,8 +1,8 @@
-frog
-grof
 cat
+dog
+frog
+god
+grof
 hello
 leloh
 olleh
-god
-dog
