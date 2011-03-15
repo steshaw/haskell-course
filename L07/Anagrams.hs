@@ -26,15 +26,16 @@ grabEm word words = map fst $ Prelude.filter f sdict
     sortedWord = sort word
     sdict = zip words (map sort words)
 
+lowercase :: String -> String
+lowercase = map toLower
+
 -- Return all anagrams of the given string
 -- that appear in the given dictionary file.
 anagrams :: String -> FilePath -> IO [String]
 anagrams word dictionaryFile = do
     contents <- readFile dictionaryFile
-    return $ grabEm word $ lines contents
+    return $ grabEm (lowercase word) $ lines contents
 
 -- Compare two strings for equality, ignoring case
 equalIgnoringCase :: String -> String -> Bool
-equalIgnoringCase s1 s2 = (uppercase s1) == (uppercase s2)
-  where
-    uppercase = map toLower
+equalIgnoringCase s1 s2 = (lowercase s1) == (lowercase s2)

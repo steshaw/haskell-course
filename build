@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ghc --make L05Check
+ghc --make anagrams
+ghc --make fast-anagrams
