@@ -10,3 +10,4 @@ syntax: glob
 dist
 out
 L05Check
+anagrams

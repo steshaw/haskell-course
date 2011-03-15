@@ -27,11 +27,11 @@ import L03.Parser hiding (tests)
 import L04.Fluffy
 import L04.Misty
 import L04.Tests
-import L05.Testing hiding (tests)
+import L05.Testing hiding (tests, main)
 import L06.JsonValue
 import L06.MoreParser
 import L06.JsonParser
-import L07.Anagrams
+import L07.Anagrams -- hiding (main)
 import L08.FastAnagrams
 import L09.EditDistance
 import L09.MetricSpace
