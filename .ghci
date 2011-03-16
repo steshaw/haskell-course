@@ -1,9 +1,12 @@
 -- :set prompt ">> "
 :set -Wall
-:set -fno-warn-orphans
 :set -fno-warn-type-defaults
+
+-- TODO: Try turning on these warnings and dealing with the consequences.
+:set -fno-warn-orphans
 :set -fno-warn-name-shadowing
 :set -fno-warn-unused-do-bind
+
 :m + Test.QuickCheck
 :load Course.hs
--- :module +Course
+:module +Course

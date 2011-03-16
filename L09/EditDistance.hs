@@ -1,5 +1,4 @@
-module L09.EditDistance
-(
+module L09.EditDistance (
   editDistance
 , Edit(..)
 , Edits
@@ -11,31 +10,22 @@ import Data.Array
 import Prelude hiding (any, minimum)
 import Data.Foldable
 
-editDistance ::
-  Eq a =>
-  [a]
-  -> [a]
-  -> Int
+editDistance :: Eq a => [a] -> [a] -> Int
 editDistance x y =
   let t                    = table x y
       ((x0, y0), (x1, y1)) = bounds t
   in t ! (x1 - x0, y1 - y0)
 
 data Edit a =
-  Delete
-  | Insert a
-  | Subst a
-  | Copy
+    Delete
+    | Insert a
+    | Subst a
+    | Copy
   deriving (Eq, Show)
 
-type Edits a =
-  [Edit a]
+type Edits a = [Edit a]
 
-diff ::
-  Eq a =>
-  [a]
-  -> [a]
-  -> Edits a
+diff :: Eq a => [a] -> [a] -> Edits a
 diff a b =
   let di _ _ 0 0 = []
       di _ d 0 _ = map Insert d
@@ -63,10 +53,7 @@ diff a b =
       ((x0, y0), (x1, y1)) = bounds t
   in reverse $ di a' b' (x1 - x0) (y1 - y0)
 
-applyDiff ::
-  [a]
-  -> Edits a
-  -> [a]
+applyDiff :: [a] -> Edits a -> [a]
 applyDiff _ [] =
   []
 applyDiff [] _ =
@@ -84,11 +71,7 @@ applyDiff xs     (Insert c:es) =
 
 -- do not export
 
-table ::
-  Eq a =>
-  [a]
-  -> [a]
-  -> Array (Int, Int) Int
+table :: Eq a => [a] -> [a] -> Array (Int, Int) Int
 table xs ys  =
   let m      = length xs
       n      = length ys

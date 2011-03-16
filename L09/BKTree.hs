@@ -19,15 +19,13 @@ import Prelude hiding (any, foldr, null)
 import Data.Foldable
 import Data.Monoid
 
-data BKTree a =
-  Node a !Int (BMap a)
-  | Leaf
+data BKTree a 
+    = Node a !Int (BMap a)
+    | Leaf
   deriving (Eq, Show)
 
-empty ::
-  BKTree a
-empty =
-  Leaf
+empty :: BKTree a
+empty = Leaf
 
 instance MetricSpace a => Monoid (BKTree a) where
   mempty =
